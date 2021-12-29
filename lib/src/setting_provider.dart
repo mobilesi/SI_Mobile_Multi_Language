@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:simple_setting/simple_setting.dart';
 import 'package:simple_setting/src/cubit/base_state.dart';
 import 'package:simple_setting/src/cubit/setting_cubit.dart';
 import 'package:simple_setting/src/setting_data.dart';
@@ -12,7 +15,50 @@ class SettingProvider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<SettingCubit>(create: (_) => SettingCubit(), child: child,);
+    return BlocProvider<SettingCubit>(
+        create: (_) => SettingCubit(),
+        child: _SettingProvider(
+          child: child,
+        ));
+  }
+}
+
+class _SettingProvider extends StatefulWidget {
+  final Widget child;
+
+  const _SettingProvider({Key? key, required this.child}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() {
+    return _SettingProviderBody();
+  }
+}
+
+class _SettingProviderBody extends State<_SettingProvider> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    if (SettingData.langMap!.isNotEmpty) {
+      WidgetsBinding.instance!.addObserver(this);
+      SettingData.lang = SettingData.langMap![Platform.localeName];
+    }
+    super.initState();
+  }
+
+  @override
+  void didChangeLocales(List<Locale>? locales) {
+    try {
+      if (SettingData.langMap!.isNotEmpty) {
+        SimpleSetting.changeLanguage(context, SettingData.langMap![Platform.localeName]);
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    super.didChangeLocales(locales);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.child;
   }
 }
 
@@ -31,7 +77,6 @@ class SettingWidget extends StatefulWidget {
 }
 
 class _SettingWidgetBody extends State<SettingWidget> {
-
   dynamic language, mode, vision;
 
   @override
@@ -56,24 +101,27 @@ class _SettingWidgetBody extends State<SettingWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<SettingCubit, BaseState>(listener: (_, state) {
-      if (state is LoadedState) {
-        if (state.type == SettingType.language) {
-          setState(() {
-            language = state.data;
-          });
-        } else if (state.type == SettingType.mode) {
-          setState(() {
-            mode = state.data;
-          });
-        } else if (state.type == SettingType.vision) {
-          setState(() {
-            vision = state.data;
-          });
-        } else {
-          // todo
+    return BlocListener<SettingCubit, BaseState>(
+      listener: (_, state) {
+        if (state is LoadedState) {
+          if (state.type == SettingType.language) {
+            setState(() {
+              language = state.data;
+            });
+          } else if (state.type == SettingType.mode) {
+            setState(() {
+              mode = state.data;
+            });
+          } else if (state.type == SettingType.vision) {
+            setState(() {
+              vision = state.data;
+            });
+          } else {
+            // todo
+          }
         }
-      }
-    }, child: widget.builder(language, mode, vision),);
+      },
+      child: widget.builder(language, mode, vision),
+    );
   }
 }

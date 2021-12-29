@@ -6,12 +6,18 @@ import 'package:simple_setting/src/cubit/setting_cubit.dart';
 import 'package:simple_setting/src/setting_data.dart';
 export 'package:simple_setting/src/setting_data.dart';
 export 'package:simple_setting/src/setting_provider.dart';
+export 'src/extension.dart';
 
 class SimpleSetting {
-  static init({languageData = const {}, modeData = const {}, visionData = const {}}) {
+  static init(
+      {languageData = const {},
+      modeData = const {},
+      visionData = const {},
+      Map<String, dynamic> langMap = const {}}) {
     SettingData.lang = languageData;
     SettingData.mode = modeData;
     SettingData.vision = visionData;
+    SettingData.langMap = langMap;
   }
 
   static changeLanguage(BuildContext context, languageData) {
