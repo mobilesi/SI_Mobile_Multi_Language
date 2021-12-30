@@ -62,12 +62,28 @@ SimpleSetting.changeLanguage(Lang.en);
 ```
 
 ### Note:
-If you need automatic change language follow by system language, you can parse `langMap` parameter to `init` function, ex:
+- If you need automatic change language follow by system language, you can parse `langMap` parameter to `init` function, ex:
 ```dart
 SimpleSetting.init(langMap: {
     "en_US": Lang.en,
     "vi_VN": Lang.vi
 });
+```
+- If you need format a string with parameter, you can use `format` string extension
+```dart
+class Lang {
+  static const Map<String, String> vi = {
+    "title": "Ví dụ :id",
+  };
+
+  static const Map<String, String> en = {
+    "title": "Example :id",
+  };
+}
+
+// and use
+Text("title".format({"id": 1}));
+
 ```
 
 ### Full example

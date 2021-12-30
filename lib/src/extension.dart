@@ -21,6 +21,17 @@ extension GetText on String {
       return this;
     }
   }
+
+  String format(Map<String, dynamic> params) {
+    String text = tr;
+    if (params.isEmpty) {
+      return text;
+    }
+    for (var element in params.keys) {
+      text = text.replaceAll(":$element", params[element].toString());
+    }
+    return text;
+  }
 }
 
 extension GetWidget on Widget {
