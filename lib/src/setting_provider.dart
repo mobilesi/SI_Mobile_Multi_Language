@@ -1,32 +1,16 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simple_setting/simple_setting.dart';
-import 'package:simple_setting/src/cubit/base_state.dart';
-import 'package:simple_setting/src/cubit/setting_cubit.dart';
+import 'package:simple_setting/src/constant.dart';
 import 'package:simple_setting/src/setting_data.dart';
 import 'package:simple_setting/src/setting_type.dart';
 
-class SettingProvider extends StatelessWidget {
+class SettingProvider extends StatefulWidget {
   final Widget child;
 
   const SettingProvider({Key? key, required this.child}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider<SettingCubit>(
-        create: (_) => SettingCubit(),
-        child: _SettingProvider(
-          child: child,
-        ));
-  }
-}
-
-class _SettingProvider extends StatefulWidget {
-  final Widget child;
-
-  const _SettingProvider({Key? key, required this.child}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -34,7 +18,7 @@ class _SettingProvider extends StatefulWidget {
   }
 }
 
-class _SettingProviderBody extends State<_SettingProvider> with WidgetsBindingObserver {
+class _SettingProviderBody extends State<SettingProvider> with WidgetsBindingObserver {
   @override
   void initState() {
     if (SettingData.langMap!.isNotEmpty) {
@@ -48,12 +32,18 @@ class _SettingProviderBody extends State<_SettingProvider> with WidgetsBindingOb
   void didChangeLocales(List<Locale>? locales) {
     try {
       if (SettingData.langMap!.isNotEmpty) {
-        SimpleSetting.changeLanguage(context, SettingData.langMap![Platform.localeName]);
+        SimpleSetting.changeLanguage(SettingData.langMap![Platform.localeName]);
       }
     } catch (e) {
       debugPrint(e.toString());
     }
     super.didChangeLocales(locales);
+  }
+
+  @override
+  void dispose() {
+    Constant.controller.close();
+    super.dispose();
   }
 
   @override
@@ -79,6 +69,8 @@ class SettingWidget extends StatefulWidget {
 class _SettingWidgetBody extends State<SettingWidget> {
   dynamic language, mode, vision;
 
+  late StreamSubscription subscription;
+
   @override
   void initState() {
     if (widget.language == null) {
@@ -96,32 +88,34 @@ class _SettingWidgetBody extends State<SettingWidget> {
     } else {
       vision = widget.vision;
     }
+    subscription = Constant.controller.stream.listen((SettingType type) {
+      if (type == SettingType.language) {
+        setState(() {
+          language = SettingData.lang;
+        });
+      } else if (type == SettingType.mode) {
+        setState(() {
+          mode = SettingData.mode;
+        });
+      } else if (type == SettingType.vision) {
+        setState(() {
+          vision = SettingData.vision;
+        });
+      } else {
+        // todo
+      }
+    });
     super.initState();
   }
 
   @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocListener<SettingCubit, BaseState>(
-      listener: (_, state) {
-        if (state is LoadedState) {
-          if (state.type == SettingType.language) {
-            setState(() {
-              language = state.data;
-            });
-          } else if (state.type == SettingType.mode) {
-            setState(() {
-              mode = state.data;
-            });
-          } else if (state.type == SettingType.vision) {
-            setState(() {
-              vision = state.data;
-            });
-          } else {
-            // todo
-          }
-        }
-      },
-      child: widget.builder(language, mode, vision),
-    );
+    return widget.builder(language, mode, vision);
   }
 }

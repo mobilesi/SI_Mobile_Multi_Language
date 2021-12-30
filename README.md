@@ -34,10 +34,16 @@ SimpleSetting.init(languageData: Lang.vi);
 ```
 
 ### Step 3
-Wrap your first widget by `SettingProvider`
+Wrap your first widget by `SettingProvider` if you want auto change language by system setting
 ```dart
 void main() {
+  SimpleSetting.init(languageData: Lang.vi);
   runApp(const SettingProvider(child: MyApp()));
+}
+// or 
+void main() {
+  SimpleSetting.init(languageData: Lang.vi);
+  runApp(const MyApp().provider);
 }
 ```
 
@@ -75,7 +81,7 @@ void main() {
   //   "vi_VN": Lang.vi
   // });
   SimpleSetting.init(languageData: Lang.vi);
-  runApp(const SettingProvider(child: MyApp()));
+  runApp(const MyApp());
 }
 
 class Lang {
@@ -128,7 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: () {
           // check current lang
           bool isVi = SettingData.lang == Lang.vi;
-          SimpleSetting.changeLanguage(context, isVi ? Lang.en : Lang.vi);
+          SimpleSetting.changeLanguage(isVi ? Lang.en : Lang.vi);
         },
         tooltip: 'Increment',
         child: const Icon(Icons.add),
