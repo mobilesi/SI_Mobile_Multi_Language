@@ -1,9 +1,8 @@
 library simple_setting;
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:simple_setting/src/cubit/setting_cubit.dart';
+import 'package:simple_setting/src/constant.dart';
 import 'package:simple_setting/src/setting_data.dart';
+import 'package:simple_setting/src/setting_type.dart';
 export 'package:simple_setting/src/setting_data.dart';
 export 'package:simple_setting/src/setting_provider.dart';
 export 'src/extension.dart';
@@ -20,18 +19,18 @@ class SimpleSetting {
     SettingData.langMap = langMap;
   }
 
-  static changeLanguage(BuildContext context, languageData) {
+  static changeLanguage(languageData) {
     SettingData.lang = languageData;
-    BlocProvider.of<SettingCubit>(context).changeLanguage();
+    Constant.controller.add(SettingType.language);
   }
 
-  static changeMode(BuildContext context, modeData) {
+  static changeMode(modeData) {
     SettingData.mode = modeData;
-    BlocProvider.of<SettingCubit>(context).changeMode();
+    Constant.controller.add(SettingType.mode);
   }
 
-  static changeVision(BuildContext context, visionData) {
+  static changeVision(visionData) {
     SettingData.vision = visionData;
-    BlocProvider.of<SettingCubit>(context).changeVision();
+    Constant.controller.add(SettingType.vision);
   }
 }

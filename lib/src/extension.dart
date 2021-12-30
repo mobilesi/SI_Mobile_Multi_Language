@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:simple_setting/simple_setting.dart';
 import 'package:simple_setting/src/setting_data.dart';
 
 extension GetText on String {
@@ -16,5 +20,18 @@ extension GetText on String {
     }catch(e){
       return this;
     }
+  }
+}
+
+extension GetWidget on Widget {
+  Widget get obs {
+    return SettingWidget(builder: (_, __, ___) {
+      debugPrint(jsonEncode(SettingData.lang));
+      return this;
+    });
+  }
+
+  Widget get provider {
+    return SettingProvider(child: this,);
   }
 }
