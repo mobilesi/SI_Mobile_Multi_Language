@@ -34,7 +34,7 @@ SimpleSetting.init(languageData: Lang.vi);
 ```
 
 ### Step 3
-Wrap your first widget by `SettingProvider` if you want auto change language by system setting
+Wrap your first widget by `SettingProvider`
 ```dart
 void main() {
   SimpleSetting.init(languageData: Lang.vi);
@@ -58,7 +58,7 @@ SettingWidget(builder: (_, __, ___) {
 ### Step 5
 When you want to change language, use this statement
 ```dart
-SimpleSetting.changeLanguage(context, Lang.en);
+SimpleSetting.changeLanguage(Lang.en);
 ```
 
 ### Note:
