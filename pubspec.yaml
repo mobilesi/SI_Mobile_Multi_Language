@@ -1,6 +1,6 @@
 name: simple_setting
 description: A package for internationalizing flutter apps by simple way.
-version: 0.0.3
+version: 0.0.4
 homepage: "https://gitlab.com/tuanbaros123/simple_setting"
 
 environment:

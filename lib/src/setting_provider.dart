@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:simple_setting/simple_setting.dart';
@@ -18,12 +17,14 @@ class SettingProvider extends StatefulWidget {
   }
 }
 
-class _SettingProviderBody extends State<SettingProvider> with WidgetsBindingObserver {
+class _SettingProviderBody extends State<SettingProvider>
+    with WidgetsBindingObserver {
   @override
   void initState() {
     if (SettingData.langMap!.isNotEmpty) {
       WidgetsBinding.instance!.addObserver(this);
-      SettingData.lang = SettingData.langMap![Platform.localeName];
+      SettingData.lang = SettingData
+          .langMap![WidgetsBinding.instance!.window.locale.toString()];
     }
     super.initState();
   }
@@ -32,7 +33,8 @@ class _SettingProviderBody extends State<SettingProvider> with WidgetsBindingObs
   void didChangeLocales(List<Locale>? locales) {
     try {
       if (SettingData.langMap!.isNotEmpty) {
-        SimpleSetting.changeLanguage(SettingData.langMap![Platform.localeName]);
+        SimpleSetting.changeLanguage(SettingData
+            .langMap![WidgetsBinding.instance!.window.locale.toString()]);
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -58,7 +60,9 @@ class SettingWidget extends StatefulWidget {
   final dynamic mode;
   final dynamic vision;
 
-  const SettingWidget({Key? key, required this.builder, this.language, this.mode, this.vision}) : super(key: key);
+  const SettingWidget(
+      {Key? key, required this.builder, this.language, this.mode, this.vision})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() {

@@ -9,7 +9,10 @@ export 'src/extension.dart';
 
 class SimpleSetting {
   static init(
-      {languageData = const {}, modeData = const {}, visionData = const {}, Map<String, dynamic> langMap = const {}}) {
+      {languageData = const {},
+      modeData = const {},
+      visionData = const {},
+      Map<String, dynamic> langMap = const {}}) {
     SettingData.lang = languageData;
     SettingData.mode = modeData;
     SettingData.vision = visionData;

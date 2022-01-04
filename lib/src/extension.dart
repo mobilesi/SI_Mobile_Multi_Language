@@ -2,8 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:simple_setting/simple_setting.dart';
-import 'package:simple_setting/src/setting_data.dart';
+
+import 'setting_data.dart';
+import 'setting_provider.dart';
 
 extension GetText on String {
   String get tr {
@@ -58,6 +59,14 @@ extension GetText on String {
     } catch (e) {
       return text;
     }
+  }
+
+  get mode {
+    return SettingData.mode[this];
+  }
+
+  get vision {
+    return SettingData.vision[this];
   }
 }
 
