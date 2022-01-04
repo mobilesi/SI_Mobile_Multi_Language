@@ -1,3 +1,1 @@
-enum SettingType {
-  language, mode, vision
-}
+enum SettingType { language, mode, vision }

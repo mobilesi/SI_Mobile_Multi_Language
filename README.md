@@ -27,38 +27,41 @@ class Lang {
 }
 ```
 
-### Step 2
-Init language info
-```dart
-SimpleSetting.init(languageData: Lang.vi);
-```
+* If you use json file, skip `Step 1`
 
-### Step 3
-Wrap your first widget by `SettingProvider`
+### Step 2
+Init language info and wrap your first widget by `SettingProvider`
 ```dart
-void main() {
-  SimpleSetting.init(languageData: Lang.vi);
-  runApp(const SettingProvider(child: MyApp()));
-}
-// or 
 void main() {
   SimpleSetting.init(languageData: Lang.vi);
   runApp(const MyApp().provider);
 }
-```
-
-### Step 4
-Catch language setting change by `SettingWidget` and use language by string extension `tr`
-```dart
-SettingWidget(builder: (_, __, ___) {
-  return MyHomePage(title: "title".tr);
+// for json
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SimpleSetting.init(languageData: await "path to asset json file".js());
+  runApp(const MyApp().provider);
 }
 ```
 
-### Step 5
+### Step 3
+Catch language setting change by `SettingWidget` and use language by string extension `obs`
+```dart
+SettingWidget(builder: (_, __, ___) {
+  return MyHomePage(title: "title".obs());
+}
+
+// or use extension for Text widget
+Text("title").obs()
+```
+
+### Step 4
 When you want to change language, use this statement
 ```dart
 SimpleSetting.changeLanguage(Lang.en);
+
+// for json
+SimpleSetting.changeLanguage(await "path to asset json file".js());
 ```
 
 ### Note:
@@ -69,7 +72,7 @@ SimpleSetting.init(langMap: {
     "vi_VN": Lang.vi
 });
 ```
-- If you need format a string with parameter, you can use `format` string extension
+- If you need format a string with parameter, you can parse params to `obs` extension
 ```dart
 class Lang {
   static const Map<String, String> vi = {
@@ -82,7 +85,10 @@ class Lang {
 }
 
 // and use
-Text("title".format({"id": 1}));
+Text("title".obs(params: {"id": 1}));
+
+// or
+Text("title").obs(params: {"id": 1});
 
 ```
 
@@ -121,9 +127,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SettingWidget(builder: (language, _, __) {
-        return MyHomePage(title: "title".tr);
-      }),
+      home: const MyHomePage(title: "title"),
     );
   }
 }
@@ -143,7 +147,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(widget.title).obs(),
       ),
       body: Container(),
       floatingActionButton: FloatingActionButton(
