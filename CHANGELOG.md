@@ -10,3 +10,7 @@
 
 * Support format string with parameter
 * Support `obs` extension for [String] data and [Text] widget
+
+## [0.0.4] - 09/02/2022
+
+* Support web
