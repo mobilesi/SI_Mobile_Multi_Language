@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:simple_setting/simple_setting.dart';
 import 'package:simple_setting/src/constant.dart';
-import 'package:simple_setting/src/setting_data.dart';
 import 'package:simple_setting/src/setting_type.dart';
 
 class SettingProvider extends StatefulWidget {
@@ -22,9 +21,9 @@ class _SettingProviderBody extends State<SettingProvider>
   @override
   void initState() {
     if (SettingData.langMap!.isNotEmpty) {
-      WidgetsBinding.instance!.addObserver(this);
+      WidgetsBinding.instance.addObserver(this);
       SettingData.lang = SettingData
-          .langMap![WidgetsBinding.instance!.window.locale.toString()];
+          .langMap![WidgetsBinding.instance.window.locale.toString()];
     }
     super.initState();
   }
@@ -34,7 +33,7 @@ class _SettingProviderBody extends State<SettingProvider>
     try {
       if (SettingData.langMap!.isNotEmpty) {
         SimpleSetting.changeLanguage(SettingData
-            .langMap![WidgetsBinding.instance!.window.locale.toString()]);
+            .langMap![WidgetsBinding.instance.window.locale.toString()]);
       }
     } catch (e) {
       debugPrint(e.toString());
