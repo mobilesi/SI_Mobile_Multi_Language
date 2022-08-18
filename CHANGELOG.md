@@ -14,3 +14,7 @@
 ## [0.0.4] - 09/02/2022
 
 * Support web
+
+## [0.0.4+1] - 18/08/2022
+
+* Remove `!` for `WidgetsBinding.instance` (warning in flutter 3.0.5)
